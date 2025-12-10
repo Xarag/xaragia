@@ -1,0 +1,276 @@
+{
+  "layer": "top",
+  "position": "top",
+  "height": 34,
+  "width": 1920,
+  "spacing": 6,
+  "margin": "6 12 0 12",
+  "modules-left": [
+    "custom/launcher",
+    "mango/tags",
+    "wlr/workspaces",
+    "tray"
+  ],
+  "modules-center": [
+    "clock#date",
+    "clock#time",
+    "custom/weather",
+    "custom/moon"
+  ],
+  "modules-right": [
+    "custom/updates",
+    "cpu",
+    "cpu#frequency",
+    "memory",
+    "disk#root",
+    "disk#home",
+    "temperature",
+    "bluetooth",
+    "network",
+    "pulseaudio",
+    "battery",
+    "idle_inhibitor",
+    "custom/notification",
+    "custom/powermenu"
+  ],
+  
+  // MangoWC теги (если доступно)
+  "mango/tags": {
+    "format": "<span foreground='{foreground}' background='{background}'>{icon}</span>",
+    "format-icons": {
+      "1": "", "2": "", "3": "", "4": "", "5": "",
+      "6": "", "7": "", "8": "", "9": ""
+    },
+    "active-foreground": "#98fb98",
+    "active-background": "#2e8b57",
+    "inactive-foreground": "#7a9c89",
+    "inactive-background": "transparent",
+    "urgent-foreground": "#ff6b6b",
+    "urgent-background": "#ff6b6b20",
+    "interval": 1,
+    "rotate": 0
+  },
+  
+  // Workspaces как fallback
+  "wlr/workspaces": {
+    "format": "{icon}",
+    "format-icons": {
+      "1": "", "2": "", "3": "", "4": "", "5": "",
+      "6": "", "7": "", "8": "", "9": ""
+    },
+    "active-only": false,
+    "all-outputs": true,
+    "on-click": "activate"
+  },
+  
+  // Трей
+  "tray": {
+    "icon-size": 16,
+    "spacing": 8,
+    "reverse-direction": true
+  },
+  
+  // Часы - дата
+  "clock#date": {
+    "format": " {:%a %d %b}",
+    "interval": 60,
+    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+    "calendar": {
+      "mode": "year",
+      "on-scroll": 1,
+      "format": {
+        "months": "<span color='#98fb98'><b>{}</b></span>",
+        "days": "<span color='#a7c5bd'><b>{}</b></span>",
+        "today": "<span color='#32cd32' underline='single'><b>{}</b></span>"
+      }
+    }
+  },
+  
+  // Часы - время
+  "clock#time": {
+    "format": " {:%H:%M:%S}",
+    "interval": 1,
+    "tooltip-format": "System uptime: {uptime}"
+  },
+  
+  // Погода
+  "custom/weather": {
+    "exec": "fish ~/.config/waybar/scripts/weather.fish",
+    "interval": 1800,
+    "format": "{}",
+    "return-type": "json",
+    "tooltip": true
+  },
+  
+  // Фаза луны
+  "custom/moon": {
+    "exec": "fish ~/.config/waybar/scripts/moon.fish",
+    "interval": 3600,
+    "format": "{}",
+    "return-type": "json"
+  },
+  
+  // Обновления системы
+  "custom/updates": {
+    "exec": "fish ~/.config/waybar/scripts/updates.fish",
+    "interval": 600,
+    "format": "{}",
+    "return-type": "json",
+    "on-click": "foot -e fish -c 'sudo pacman -Syu'",
+    "on-click-right": "foot -e fish -c 'checkupdates'"
+  },
+  
+  // CPU общее
+  "cpu": {
+    "interval": 2,
+    "format": " {usage:2}%",
+    "format-alt": " {avg_frequency:.1f}GHz",
+    "states": {
+      "warning": 75,
+      "critical": 90
+    },
+    "tooltip-format": "CPU: {usage}%\nThreads: {num_threads}\nCores: {num_cores}\nTemperature: {temperature}°C"
+  },
+  
+  // CPU частота
+  "cpu#frequency": {
+    "interval": 5,
+    "format": " {avg_frequency:.1f}GHz",
+    "tooltip": false
+  },
+  
+  // Память
+  "memory": {
+    "interval": 2,
+    "format": " {percentage:2}%",
+    "format-alt": " {used:.1f}G/{total:.1f}G",
+    "states": {
+      "warning": 75,
+      "critical": 90
+    },
+    "tooltip-format": "Memory: {percentage}%\nUsed: {used:.1f}GiB\nTotal: {total:.1f}GiB\nSwap: {swapUsed:.1f}G/{swapTotal:.1f}G"
+  },
+  
+  // Диск корень
+  "disk#root": {
+    "interval": 30,
+    "format": " {percentage}%",
+    "path": "/",
+    "tooltip-format": "Root: {used:.1f}G/{total:.1f}G ({percentage}%)"
+  },
+  
+  // Диск домашний
+  "disk#home": {
+    "interval": 30,
+    "format": " {percentage}%",
+    "path": "/home",
+    "tooltip-format": "Home: {used:.1f}G/{total:.1f}G ({percentage}%)"
+  },
+  
+  // Температура
+  "temperature": {
+    "thermal-zone": 0,
+    "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+    "interval": 5,
+    "format": " {temperatureC}°C",
+    "format-critical": " {temperatureC}°C",
+    "critical-threshold": 80,
+    "tooltip-format": "CPU: {temperatureC}°C\nGPU: {gpuTemp}°C"
+  },
+  
+  // Bluetooth
+  "bluetooth": {
+    "format": "",
+    "format-disabled": "",
+    "format-connected": " {device_alias}",
+    "on-click": "blueman-manager",
+    "tooltip-format": "{controller_alias}\n{controller_address}\n\n{num_connections} connected"
+  },
+  
+  // Сеть
+  "network": {
+    "interval": 5,
+    "format-wifi": " {essid} ({signalStrength}%)",
+    "format-ethernet": " {ifname}",
+    "format-disconnected": "",
+    "format-linked": " {ifname} (No IP)",
+    "tooltip-format": "{ifname}\nIP: {ipaddr}\nGateway: {gwaddr}\nDNS: {dns}\n\n {bandwidthUpBits}  {bandwidthDownBits}",
+    "on-click": "foot -e nmtui",
+    "on-click-right": "nm-connection-editor"
+  },
+  
+  // Аудио
+  "pulseaudio": {
+    "format": "{icon} {volume}%",
+    "format-bluetooth": "{icon} {volume}%",
+    "format-muted": "",
+    "format-icons": {
+      "headphone": "",
+      "headset": "",
+      "default": ["", ""]
+    },
+    "scroll-step": 5,
+    "on-click": "pavucontrol",
+    "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+    "tooltip-format": "{desc}\nVolume: {volume}%\nSink: {format_source}"
+  },
+  
+  // Батарея
+  "battery": {
+    "interval": 10,
+    "states": {
+      "warning": 25,
+      "critical": 10
+    },
+    "format": "{icon} {capacity}%",
+    "format-charging": " {capacity}%",
+    "format-plugged": " {capacity}%",
+    "format-alt": "{time}",
+    "format-icons": ["", "", "", "", ""],
+    "tooltip-format": "Battery: {capacity}%\nTime: {time}\nHealth: {health}%\nStatus: {status}"
+  },
+  
+  // Ингибитор бездействия
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": {
+      "activated": "",
+      "deactivated": ""
+    },
+    "tooltip-format": "Idle Inhibitor: {status}"
+  },
+  
+  // Уведомления
+  "custom/notification": {
+    "exec": "fish ~/.config/waybar/scripts/notifications.fish",
+    "interval": 5,
+    "format": "{icon}",
+    "return-type": "json",
+    "format-icons": {
+      "notification": "",
+      "none": "",
+      "dnd-notification": "",
+      "dnd-none": "",
+      "inhibited-notification": "",
+      "inhibited-none": ""
+    },
+    "on-click": "swaync-client -t -sw",
+    "on-click-right": "swaync-client -d -sw"
+  },
+  
+  // Кнопка запуска
+  "custom/launcher": {
+    "format": "",
+    "on-click": "fish ~/.config/waybar/scripts/launcher.fish",
+    "on-click-right": "fish ~/.config/waybar/scripts/launcher.fish --drun",
+    "tooltip": "Left: Apps Menu | Right: App Launcher"
+  },
+  
+  // Меню питания
+  "custom/powermenu": {
+    "format": "⏻",
+    "on-click": "fish ~/.config/waybar/scripts/powermenu.fish",
+    "on-click-right": "wlogout --protocol layer-shell",
+    "tooltip": "Power Menu"
+  }
+}
